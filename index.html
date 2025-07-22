@@ -14,7 +14,7 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" onclick="showPage('home')">Navbar</a>
+            <a class="navbar-brand" onclick="showPage('home')">Product Management</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -25,20 +25,20 @@
                         <a class="nav-link active" aria-current="page" onclick="">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showPage('addproducts')">Features</a>
+                        <a class="nav-link" onclick="showPage('addproducts')">Add</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="showPage('editproducts')">Pricing</a>
+                        <a class="nav-link" onclick="showPage('editproducts')">Edit</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Dropdown link
+                            Sortby
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="#">Id</a></li>
+                            <li><a class="dropdown-item" href="#">Name</a></li>
+                            <li><a class="dropdown-item" href="#">Price</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -47,15 +47,51 @@
     </nav>
     <!-- Sections -->
     <section id="home" class="active">
-        <h1>List products</h1>
+        <div class="d-flex flex-row-reverse mt-4">
+            <div class="btn-group me-5">
+                <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Sortby
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Id</a></li>
+                    <li><a class="dropdown-item" href="#">Name</a></li>
+                    <li><a class="dropdown-item" href="#">Price</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-primary me-3">Edit</button>
+            <button type="button" class="btn btn-primary me-3">Add</button>
+        </div>
+        <div class="d-flex flex-row ms-5">
+            <div class="card me-5" style="width: 14rem">
+                <img src="images/headphone.jpeg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">1. Headphone</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+            <div class="card" style="width: 14rem">
+                <img src="images/headphone.jpeg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="addproducts">
-        <h1>Add New Products</h1>
     </section>
 
     <section id="editproducts">
-        <h1>Edit Products</h1>
     </section>
 
     <script src="app.js"></script>
