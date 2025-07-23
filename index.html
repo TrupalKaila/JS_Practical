@@ -30,7 +30,7 @@
         </div>
     </nav>
     <!-- Home Section -->
-    <section id="home"  class="active">
+    <section id="home" class="active">
         <!-- Add and Sort buttons -->
         <div class="d-flex flex-row-reverse mt-4">
             <div class="btn-group me-5">
@@ -39,12 +39,18 @@
                     Sortby
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Id</a></li>
-                    <li><a class="dropdown-item" href="#">Name</a></li>
-                    <li><a class="dropdown-item" href="#">Price</a></li>
+                    <li><a class="dropdown-item" href="#" id="sortById">Id</a></li>
+                    <li><a class="dropdown-item" href="#" id="sortByName">Name</a></li>
+                    <li><a class="dropdown-item" href="#" id="sortByPrice">Price</a></li>
                 </ul>
             </div>
             <button type="button" class="btn btn-primary me-3" onclick="showPage('addproducts')">Add</button>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Add product id" id="searchitem" value="">
+                <button class="btn btn-outline-secondary" type="button" id="filterById" >Filter</button>
+            </div>
+
         </div>
 
         <!-- Card section -->

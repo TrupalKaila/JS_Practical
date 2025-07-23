@@ -13,9 +13,9 @@ function saveProduct() {
     const product = {
       id: productId,
       name: productName,
-      image: reader.result, // base64 data URL
-      price: "&#8377;" + productPrice,
-      description: productDesc
+      price: productPrice,
+      description: productDesc,
+      image: reader.result // base64 data URL
     };
 
     localStorage.setItem(`product-${productId}`, JSON.stringify(product));
@@ -71,7 +71,7 @@ function editProduct(id) {
 
   // Fill the edit form with existing values
   document.getElementById("edit-product-name").value = product.name;
-  document.getElementById("edit-product-price").value = product.price.replace("₹", "").replace("&#8377;", ""); // clean ₹ symbol
+  document.getElementById("edit-product-price").value = product.price;
   document.getElementById("edit-product-description").value = product.description;
 
   // Used to preview the image in input form
@@ -130,9 +130,141 @@ function saveEditedProduct() {
   }
 }
 
-function deleteProduct(id){
+function deleteProduct(id) {
   const item = localStorage.getItem(`product-${id}`);
   localStorage.removeItem(`product-${id}`);
   location.reload();
 }
 
+function getAllProducts() {
+  const allProducts = [];
+  const lastId = parseInt(localStorage.getItem("upcomingProductId")) || 0;
+
+  for (let i = 1; i <= lastId; i++) {
+    const item = localStorage.getItem(`product-${i}`);
+    if (item) {
+      const product = JSON.parse(item);
+      allProducts.push(product);
+    }
+  }
+  return allProducts;
+}
+
+function sortById() {
+  const items = getAllProducts();
+  items.sort((a, b) => a.id - b.id)
+  return items;
+}
+
+function sortByName() {
+  const items = getAllProducts();
+  items.sort((a, b) => a.name.localeCompare(b.name));
+  return items;
+}
+
+function sortByPrice() {
+  const items = getAllProducts();
+  items.sort((a, b) => a.price - b.price)
+  return items;
+}
+
+document.getElementById("sortById").addEventListener('click', function () {
+  const items = sortById();
+  let productList = document.getElementById('product-list');
+  productList.innerHTML = "";
+  for (let i = 1; i <= items.length; i++) {
+    const product = items[i - 1];
+    const card = document.createElement("div");
+    card.style.width = "14rem";
+    card.innerHTML = `
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <div class="card-body">
+          <h5 class="card-title">${product.name}</h5>
+          <p class="card-text">Price: ${product.price}</p>
+          <p class="card-text">Description: ${product.description}</p>
+          <div class="flex-wrap">
+          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          </div>  
+        </div>`;
+    productList.append(card);
+  };
+})
+
+
+document.getElementById("sortByName").addEventListener('click', function () {
+  const items = sortByName();
+  let productList = document.getElementById('product-list');
+  productList.innerHTML = "";
+  for (let i = 1; i <= items.length; i++) {
+    const product = items[i - 1];
+    const card = document.createElement("div");
+    card.style.width = "14rem";
+    card.innerHTML = `
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <div class="card-body">
+          <h5 class="card-title">${product.name}</h5>
+          <p class="card-text">Price: ${product.price}</p>
+          <p class="card-text">Description: ${product.description}</p>
+          <div class="flex-wrap">
+          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          </div>  
+        </div>`;
+    productList.append(card);
+  };
+})
+
+
+document.getElementById("sortByPrice").addEventListener('click', function () {
+  const items = sortByPrice();
+  let productList = document.getElementById('product-list');
+  productList.innerHTML = "";
+  for (let i = 1; i <= items.length; i++) {
+    const product = items[i - 1];
+    const card = document.createElement("div");
+    card.style.width = "14rem";
+    card.innerHTML = `
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <div class="card-body">
+          <h5 class="card-title">${product.name}</h5>
+          <p class="card-text">Price: ${product.price}</p>
+          <p class="card-text">Description: ${product.description}</p>
+          <div class="flex-wrap">
+          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          </div>  
+        </div>`;
+    productList.append(card);
+  };
+})
+
+
+document.getElementById("filterById").addEventListener('click', function () {
+  const items = getAllProducts();
+  const searchItem = document.getElementById("searchitem").value.trim();
+  const filtered = items.filter(item => item.id === parseInt(searchItem));
+  const product = filtered[0];
+
+  let productList = document.getElementById('product-list');
+  productList.innerHTML = "";
+
+  if (product) {
+    const card = document.createElement("div");
+    card.style.width = "14rem";
+    card.innerHTML = `
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <div class="card-body">
+          <h5 class="card-title">${product.name}</h5>
+          <p class="card-text">Price: ${product.price}</p>
+          <p class="card-text">Description: ${product.description}</p>
+          <div class="flex-wrap">
+            <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+            <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          </div>  
+        </div>`;
+    productList.append(card);
+  } else {
+    productList.innerHTML = `<h5>No product found with ID ${searchItem}</h5>`;
+  }
+});
