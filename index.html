@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" onclick="showPage('home')">Product Management</a>
@@ -22,31 +23,15 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" onclick="">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showPage('addproducts')">Add</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="showPage('editproducts')">Edit</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Sortby
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Id</a></li>
-                            <li><a class="dropdown-item" href="#">Name</a></li>
-                            <li><a class="dropdown-item" href="#">Price</a></li>
-                        </ul>
+                        <a class="nav-link active" aria-current="page" onclick="showPage('home')">Home</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <!-- Sections -->
-    <section id="home" class="active">
+    <!-- Home Section -->
+    <section id="home"  class="active">
+        <!-- Add and Sort buttons -->
         <div class="d-flex flex-row-reverse mt-4">
             <div class="btn-group me-5">
                 <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
@@ -57,47 +42,86 @@
                     <li><a class="dropdown-item" href="#">Id</a></li>
                     <li><a class="dropdown-item" href="#">Name</a></li>
                     <li><a class="dropdown-item" href="#">Price</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Separated link</a></li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-primary me-3">Edit</button>
-            <button type="button" class="btn btn-primary me-3">Add</button>
+            <button type="button" class="btn btn-primary me-3" onclick="showPage('addproducts')">Add</button>
         </div>
-        <div class="d-flex flex-row ms-5">
-            <div class="card me-5" style="width: 14rem">
-                <img src="images/headphone.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">1. Headphone</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Edit</a>
-                </div>
-            </div>
-            <div class="card" style="width: 14rem">
-                <img src="images/headphone.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
+
+        <!-- Card section -->
+        <div id="product-list" class="d-flex flex-wrap ms-5 gap-5">
+
         </div>
     </section>
 
+    <!-- Add Products Section -->
     <section id="addproducts">
+        <form id="add-product-form" class="mt-5" style="width: 600px; margin: auto;">
+            <h4>Add New Products</h4>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Product Name</span>
+                <input type="text" class="form-control" name="new-product-name" id="new-product-name" value="">
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                <input type="file" class="form-control" accept="image/*" name="new-product-image" id="new-product-image"
+                    value="">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" name="new-product-price" id="new-product-price" value="">
+                <span class="input-group-text">.00</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Description</span>
+                <textarea class="form-control" name="new-product-description" id="new-product-description"
+                    value=""></textarea>
+            </div><br>
+            <button type="button" class="btn btn-secondary" onclick="saveProduct()">Submit</button>
+        </form>
     </section>
 
+    <!-- Edit Products section -->
     <section id="editproducts">
+        <form id="edit-product-form" class="mt-5" style="width: 600px; margin: auto;">
+            <h4>Edit New Products</h4>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Product Name</span>
+                <input type="text" class="form-control" name="edit-product-name" id="edit-product-name" value="">
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                <input type="file" class="form-control" accept="image/*" name="edit-product-image"
+                    id="edit-product-image" value="">
+                <!-- <img id="edit-product-preview" src="" alt="Preview" style="width: 100px; display: none;" /> -->
+
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" name="edit-product-price" id="edit-product-price" value="">
+                <span class="input-group-text">.00</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Description</span>
+                <textarea class="form-control" name="edit-product-description" id="edit-product-description"
+                    value=""></textarea>
+            </div><br>
+            <button type="button" class="btn btn-secondary" onclick="saveEditedProduct()">Submit</button>
+        </form>
     </section>
 
     <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous"></script>
+    <script>
+        function showPage(pageId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
 </body>
 
 </html>
