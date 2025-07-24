@@ -35,7 +35,6 @@ function loadProducts() {
     productList.innerHTML = '<h5>No products is listed yet!</h5>';
     return;
   }
-
   const lastId = parseInt(localStorage.getItem("upcomingProductId")) || 0;
   for (let i = 1; i <= lastId; i++) {
     const item = localStorage.getItem(`product-${i}`);
@@ -46,14 +45,15 @@ function loadProducts() {
       card.style.width = "14rem";
 
       card.innerHTML = `
-        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" style="height: 220px;" alt="${product.name}">
         <div class="card-body">
           <h5 class="card-title">${product.name}</h5>
           <p class="card-text">Price: ${product.price}</p>
           <p class="card-text">Description: ${product.description}</p>
           <div class="flex-wrap">
-          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-primary" onclick="displayEditedProductDetails(${product.id})">Edit</a>
           <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          <a href="viewProducts.html?id=${product.id}" class="btn btn-info">View</a>
           </div>  
         </div>`;
       productList.append(card);
@@ -61,32 +61,24 @@ function loadProducts() {
   }
 }
 
-
-function editProduct(id) {
+// Display details in form
+function displayEditedProductDetails(id) {
   showPage('editproducts');
 
   const item = localStorage.getItem(`product-${id}`);
 
   const product = JSON.parse(item);
 
-  // Fill the edit form with existing values
   document.getElementById("edit-product-name").value = product.name;
   document.getElementById("edit-product-price").value = product.price;
   document.getElementById("edit-product-description").value = product.description;
 
-  // Used to preview the image in input form
-  // const preview = document.getElementById("edit-product-preview");
-  // if (preview) {
-  //   preview.src = product.image;
-  //   preview.style.display = "block";
-  // }
-  // Store the current product ID temporarily for updating later
   localStorage.setItem("editingProductId", id);
 }
 
+//To save edited details 
 function saveEditedProduct() {
   const productId = localStorage.getItem("editingProductId");
-
   const name = document.getElementById("edit-product-name").value;
   const price = document.getElementById("edit-product-price").value;
   const desc = document.getElementById("edit-product-description").value;
@@ -102,11 +94,10 @@ function saveEditedProduct() {
       const updatedProduct = {
         id: parseInt(productId),
         name,
-        price: "&#8377;" + price,
+        price: price,
         description: desc,
         image: reader.result // updated base64 image
       };
-
       localStorage.setItem(`product-${productId}`, JSON.stringify(updatedProduct));
       document.getElementById("edit-product-form").reset();
       loadProducts();
@@ -118,7 +109,7 @@ function saveEditedProduct() {
     const updatedProduct = {
       id: parseInt(productId),
       name,
-      price: "&#8377;" + price,
+      price: price,
       description: desc,
       image: existingProduct.image
     };
@@ -126,16 +117,19 @@ function saveEditedProduct() {
     localStorage.setItem(`product-${productId}`, JSON.stringify(updatedProduct));
     document.getElementById("edit-product-form").reset();
     loadProducts();
-    // alert("Product updated successfully!");
+    alert("Product updated successfully!");
+    showPage('home');
   }
 }
 
+//Delete product
 function deleteProduct(id) {
   const item = localStorage.getItem(`product-${id}`);
   localStorage.removeItem(`product-${id}`);
   location.reload();
 }
 
+//Get all products in array
 function getAllProducts() {
   const allProducts = [];
   const lastId = parseInt(localStorage.getItem("upcomingProductId")) || 0;
@@ -150,26 +144,17 @@ function getAllProducts() {
   return allProducts;
 }
 
+//Products sorted by ID and array is returned 
 function sortById() {
   const items = getAllProducts();
   items.sort((a, b) => a.id - b.id)
   return items;
 }
 
-function sortByName() {
-  const items = getAllProducts();
-  items.sort((a, b) => a.name.localeCompare(b.name));
-  return items;
-}
-
-function sortByPrice() {
-  const items = getAllProducts();
-  items.sort((a, b) => a.price - b.price)
-  return items;
-}
-
+//Displaying sorted products by id using sorted id array
 document.getElementById("sortById").addEventListener('click', function () {
   const items = sortById();
+
   let productList = document.getElementById('product-list');
   productList.innerHTML = "";
   for (let i = 1; i <= items.length; i++) {
@@ -177,21 +162,30 @@ document.getElementById("sortById").addEventListener('click', function () {
     const card = document.createElement("div");
     card.style.width = "14rem";
     card.innerHTML = `
-        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" style="height: 220px;" alt="${product.name}">
         <div class="card-body">
           <h5 class="card-title">${product.name}</h5>
           <p class="card-text">Price: ${product.price}</p>
           <p class="card-text">Description: ${product.description}</p>
           <div class="flex-wrap">
-          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-primary" onclick="displayEditedProductDetails(${product.id})">Edit</a>
           <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          
+          <a href="viewProducts.html?id=${product.id}" class="btn btn-info">View</a>
           </div>  
         </div>`;
     productList.append(card);
   };
 })
 
+//Products sorted by Name and array is returned
+function sortByName() {
+  const items = getAllProducts();
+  items.sort((a, b) => a.name.localeCompare(b.name));
+  return items;
+}
 
+//Displaying sorted products by Name using sorted name array
 document.getElementById("sortByName").addEventListener('click', function () {
   const items = sortByName();
   let productList = document.getElementById('product-list');
@@ -201,23 +195,33 @@ document.getElementById("sortByName").addEventListener('click', function () {
     const card = document.createElement("div");
     card.style.width = "14rem";
     card.innerHTML = `
-        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" style="height: 220px;" alt="${product.name}">
         <div class="card-body">
           <h5 class="card-title">${product.name}</h5>
           <p class="card-text">Price: ${product.price}</p>
           <p class="card-text">Description: ${product.description}</p>
           <div class="flex-wrap">
-          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-primary" onclick="displayEditedProductDetails(${product.id})">Edit</a>
           <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          
+          <a href="viewProducts.html?id=${product.id}" class="btn btn-info">View</a>
           </div>  
         </div>`;
     productList.append(card);
   };
 })
 
+//Products sorted by Price and array is returned
+function sortByPrice() {
+  const items = getAllProducts();
+  items.sort((a, b) => a.price - b.price)
+  return items;
+}
 
+//Displaying sorted products by price using sorted price array
 document.getElementById("sortByPrice").addEventListener('click', function () {
   const items = sortByPrice();
+
   let productList = document.getElementById('product-list');
   productList.innerHTML = "";
   for (let i = 1; i <= items.length; i++) {
@@ -225,21 +229,23 @@ document.getElementById("sortByPrice").addEventListener('click', function () {
     const card = document.createElement("div");
     card.style.width = "14rem";
     card.innerHTML = `
-        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" style="height: 220px;" alt="${product.name}">
         <div class="card-body">
           <h5 class="card-title">${product.name}</h5>
           <p class="card-text">Price: ${product.price}</p>
           <p class="card-text">Description: ${product.description}</p>
           <div class="flex-wrap">
-          <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+          <a href="#" class="btn btn-primary" onclick="displayEditedProductDetails(${product.id})">Edit</a>
           <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+          
+          <a href="viewProducts.html?id=${product.id}" class="btn btn-info">View</a>
           </div>  
         </div>`;
     productList.append(card);
   };
 })
 
-
+//Filter by id 
 document.getElementById("filterById").addEventListener('click', function () {
   const items = getAllProducts();
   const searchItem = document.getElementById("searchitem").value.trim();
@@ -253,14 +259,16 @@ document.getElementById("filterById").addEventListener('click', function () {
     const card = document.createElement("div");
     card.style.width = "14rem";
     card.innerHTML = `
-        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" alt="${product.name}">
+        <img src="${product.image || '../images/default.jpeg'}" class="card-img-top card me-5" style="height: 220px;" alt="${product.name}">
         <div class="card-body">
           <h5 class="card-title">${product.name}</h5>
           <p class="card-text">Price: ${product.price}</p>
           <p class="card-text">Description: ${product.description}</p>
           <div class="flex-wrap">
-            <a href="#" class="btn btn-primary" onclick="editProduct(${product.id})">Edit</a>
+            <a href="#" class="btn btn-primary" onclick="displayEditedProductDetails(${product.id})">Edit</a>
             <a href="#" class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</a>
+            <a href="viewProducts.html?id=${product.id}" class="btn btn-info">View</a>
+
           </div>  
         </div>`;
     productList.append(card);

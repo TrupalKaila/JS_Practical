@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Javascript Practice</title>
+    <title>Product Management</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -31,12 +31,22 @@
     </nav>
     <!-- Home Section -->
     <section id="home" class="active">
-        <!-- Add and Sort buttons -->
-        <div class="d-flex flex-row-reverse mt-4">
-            <div class="btn-group me-5">
+        <!-- Add, Filter and Sort buttons -->
+        <div class="d-flex justify-content-end align-items-center gap-3 mt-4 me-5 flex-wrap">
+            <!-- Search Bar -->
+            <div class="input-group" style="max-width: 250px;">
+                <input type="text" class="form-control" placeholder="Add product id" id="searchitem" />
+                <button class="btn btn-outline-secondary" type="button" id="filterById">Filter</button>
+            </div>
+
+            <!-- Add Button -->
+            <button type="button" class="btn btn-primary" onclick="showPage('addproducts')">Add</button>
+
+            <!-- Sort Dropdown -->
+            <div class="btn-group">
                 <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    Sortby
+                    Sort by
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#" id="sortById">Id</a></li>
@@ -44,20 +54,16 @@
                     <li><a class="dropdown-item" href="#" id="sortByPrice">Price</a></li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-primary me-3" onclick="showPage('addproducts')">Add</button>
-
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Add product id" id="searchitem" value="">
-                <button class="btn btn-outline-secondary" type="button" id="filterById" >Filter</button>
-            </div>
-
         </div>
+
 
         <!-- Card section -->
         <div id="product-list" class="d-flex flex-wrap ms-5 gap-5">
 
         </div>
     </section>
+
+
 
     <!-- Add Products Section -->
     <section id="addproducts">
@@ -83,6 +89,7 @@
                     value=""></textarea>
             </div><br>
             <button type="button" class="btn btn-secondary" onclick="saveProduct()">Submit</button>
+            <button type="button" class="btn btn-light" onclick="showPage('home')">Go back</button>
         </form>
     </section>
 
@@ -112,6 +119,7 @@
                     value=""></textarea>
             </div><br>
             <button type="button" class="btn btn-secondary" onclick="saveEditedProduct()">Submit</button>
+            <button type="button" class="btn btn-light" onclick="showPage('home')">Go back</button>
         </form>
     </section>
 
@@ -125,7 +133,11 @@
             sections.forEach(section => {
                 section.classList.remove('active');
             });
+            console.log(document.getElementById(pageId).classList);
             document.getElementById(pageId).classList.add('active');
+            if (pageId === 'home') {
+                location.reload();
+            }
         }
     </script>
 </body>
